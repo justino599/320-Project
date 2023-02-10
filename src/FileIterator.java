@@ -33,7 +33,10 @@ public class FileIterator implements Iterator<String> {
                 return null;
             while (!s.endsWith("\""))
                 s += '\n' + bufferedReader.readLine();
-            return s;
+            if (s.length() > 2)
+                return s.substring(1, s.length() - 1);
+            else
+                return getNextString();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
