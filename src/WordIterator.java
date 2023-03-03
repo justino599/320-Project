@@ -18,22 +18,18 @@ public class WordIterator implements Iterator<String> {
     }
 
     /**
-     * @return the next "word" in the file. A word is either a sequence of only letters or a sequence of only non-letters (the characters between words)
+     * @return the next "word" in the file. A word is either a sequence of only letters or a sequence of only non-letters (the characters between words). Returns null if there are no more words.
      */
     @Override
     public String next() {
-        StringBuilder word = new StringBuilder();
-
+        int startIndex = nextIndex;
         while (hasNext()) {
-            char c = (char) bytes[nextIndex++];
-            if (currentlyReadingWord != (currentlyReadingWord = Character.isLetter(c))) {
+            if (currentlyReadingWord != (currentlyReadingWord = Character.isLetter(bytes[nextIndex++]))) {
                 nextIndex--;
-                return word.toString();
-            } else {
-                word.append(c);
+                return new String(bytes, startIndex, nextIndex - startIndex);
             }
         }
 
-        return word.toString();
+        return new String(bytes, startIndex, nextIndex - startIndex);
     }
 }
