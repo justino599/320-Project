@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +7,7 @@ import java.util.Iterator;
 public class Idea1 {
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
-        idea1("bin/one_giant_string.txt");
+        idea1("bin/all_reviews_content_only.csv");
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime - startTime) + "ms");
     }
@@ -31,24 +30,15 @@ public class Idea1 {
 
         // Read in words
         Iterator<String> wordIterator = new WordIterator(filename);
-        ArrayList<String> words = new ArrayList<>(100000000);
-        while (wordIterator.hasNext()) {
-            words.add(wordIterator.next());
-        }
-        wordIterator = null;
-        System.gc();
-
-        long startTime = System.currentTimeMillis();
 
         // Main portion of algorithm
-        ArrayList<String> output = new ArrayList<>();
-//        outerLoop: while (words.hasNext()) {
-//            String word = words.next();
-        outerLoop: for (String word : words) {
+        ArrayList<String> output = new ArrayList<>(110000000);
+        outerLoop: while (wordIterator.hasNext()) {
+            String word = wordIterator.next();
             String uppercaseWord = word.toUpperCase();
-            int charIdx = uppercaseWord.charAt(0) - 'A';
-            if (0 <= charIdx && charIdx < 26) {
-                for (String[] abbrev : abbreviations[charIdx]) {
+            int firstChar = uppercaseWord.charAt(0) - 'A';
+            if (0 <= firstChar && firstChar < 26) {
+                for (String[] abbrev : abbreviations[firstChar]) {
                     if (uppercaseWord.equals(abbrev[0])) {
                         output.add(abbrev[1]);
                         continue outerLoop;
@@ -57,9 +47,6 @@ public class Idea1 {
             }
             output.add(word);
         }
-
-        long endTime = System.currentTimeMillis();
-        System.out.println("Time (idea1): " + (endTime - startTime) + "ms");
 
         return output;
     }
