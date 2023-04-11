@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Idea1 {
+public class Algorithm1 {
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
-        idea1("bin/all_reviews_content_only.csv");
+        algorithm1("bin/all_reviews_content_only.csv");
         long endTime = System.currentTimeMillis();
         System.out.println("Time: " + (endTime - startTime) + "ms");
     }
 
-    public static ArrayList<String> idea1(String filename) throws IOException {
+    public static void algorithm1(String filename) throws IOException {
         // Read in abbreviations. Stored in an array of arraylists where each index of the array is a different letter that the abbreviation starts with
         BufferedReader abbrevReader = new BufferedReader(new FileReader("bin/abbreviations.csv"));
         ArrayList<String[]>[] abbreviations = new ArrayList[26];
@@ -28,7 +28,7 @@ public class Idea1 {
         }
         abbrevReader.close();
 
-        // Read in words
+        // Read in all words from the data file
         Iterator<String> wordIterator = new WordIterator(filename);
 
         // Main portion of algorithm
@@ -47,7 +47,5 @@ public class Idea1 {
             }
             output.add(word);
         }
-
-        return output;
     }
 }
