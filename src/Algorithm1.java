@@ -38,7 +38,6 @@ public class Algorithm1 {
         wordIterator = null;
         System.gc();
 
-        System.out.println(input.size());
         // Main portion of algorithm
 
 //        outerLoop: while (wordIterator.hasNext()) {
@@ -69,9 +68,11 @@ public class Algorithm1 {
                     output.add(word);
                     long end = System.currentTimeMillis();
                     runtimes[(limit - 1000000)/1000000][j] = (end - start);
+                    System.out.println(end - start);
                 }
             }
         }
-        for (long[] runtime : runtimes) System.out.println(Arrays.toString(runtime));
+        for (long[] runtime : runtimes)
+            System.out.println(Arrays.toString(runtime));
     }
 }
