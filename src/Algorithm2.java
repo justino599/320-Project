@@ -6,18 +6,17 @@ import java.util.HashMap;
 import java.util.ListIterator;
 
 
-public class Test {
+public class Algorithm2 {
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
 
-//        Idea1.idea1("bin/one_giant_string.txt");
-        testIdea("bin/one_giant_string.txt");
+        algorithm2("bin/one_giant_string.txt");
 
         long endTime = System.currentTimeMillis();
         System.out.println("Total Time: " + (endTime - startTime) + "ms");
     }
 
-    public static ArrayList<String> testIdea(String filename) throws IOException {
+    public static void algorithm2(String filename) throws IOException {
         // Load abbreviations into a HashMap
         HashMap<String, String> abbreviations = new HashMap<>(1000);
         BufferedReader abbrevReader = new BufferedReader(new FileReader("bin/abbreviations.csv"));
@@ -48,8 +47,6 @@ public class Test {
         }
 
         long endTime = System.currentTimeMillis();
-        System.out.println("Time (testIdea): " + (endTime - startTime) + "ms");
-
-        return words;
+        System.out.println("Time (Algorithm 2): " + (endTime - startTime) + "ms");
     }
 }
