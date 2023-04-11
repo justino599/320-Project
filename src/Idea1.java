@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class Idea1 {
@@ -21,7 +22,7 @@ public class Idea1 {
 
         String line;
         while ((line = abbrevReader.readLine()) != null) {
-            String[] pieces = line.replaceAll("\"","").split(",");
+            String[] pieces = line.replaceAll("\"", "").split(",");
             pieces[0] = pieces[0].toUpperCase();
             char firstChar = pieces[0].charAt(0);
             abbreviations[firstChar - 'A'].add(pieces);
@@ -30,24 +31,48 @@ public class Idea1 {
 
         // Read in words
         Iterator<String> wordIterator = new WordIterator(filename);
+        ArrayList<String> input = new ArrayList<>(110000000);
+        while (wordIterator.hasNext())
+            input.add(wordIterator.next());
 
+        wordIterator = null;
+        System.gc();
+
+        System.out.println(input.size());
         // Main portion of algorithm
-        ArrayList<String> output = new ArrayList<>(110000000);
-        outerLoop: while (wordIterator.hasNext()) {
-            String word = wordIterator.next();
-            String uppercaseWord = word.toUpperCase();
-            int firstChar = uppercaseWord.charAt(0) - 'A';
-            if (0 <= firstChar && firstChar < 26) {
-                for (String[] abbrev : abbreviations[firstChar]) {
-                    if (uppercaseWord.equals(abbrev[0])) {
-                        output.add(abbrev[1]);
-                        continue outerLoop;
+
+//        outerLoop: while (wordIterator.hasNext()) {
+//            String word = wordIterator.next();
+//        int limit = input.size();
+        // int limit=600000;
+
+        System.out.println(input.size());
+        long[][] runtimes = new long[100][10];
+        for(int limit = 1000000; limit < 100000000; limit += 1000000) {
+            System.out.println("Current Iteration: " + limit);
+            for (int j = 0; j < 10; j++) {
+                long start = System.currentTimeMillis();
+                ArrayList<String> output = new ArrayList<>(110000000);
+                outerLoop:
+                for (int i = 0; i < limit; i++) {
+                    String word = input.get(i);
+                    String uppercaseWord = word.toUpperCase();
+                    int firstChar = uppercaseWord.charAt(0) - 'A';
+                    if (0 <= firstChar && firstChar < 26) {
+                        for (String[] abbrev : abbreviations[firstChar]) {
+                            if (uppercaseWord.equals(abbrev[0])) {
+                                output.add(abbrev[1]);
+                                continue outerLoop;
+                            }
+                        }
                     }
+                    output.add(word);
+                    long end = System.currentTimeMillis();
+                    runtimes[(limit - 1000000)/1000000][j] = (end - start);
                 }
             }
-            output.add(word);
         }
-
-        return output;
+        for (long[] runtime : runtimes) System.out.println(Arrays.toString(runtime));
+        return null;
     }
 }
