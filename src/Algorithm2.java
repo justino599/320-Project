@@ -36,17 +36,37 @@ public class Algorithm2 {
         wordIterator = null;
         System.gc();
 
-        long startTime = System.currentTimeMillis();
+        long[][] runtimes = new long[100][10];
+        for(int limit = 1000000; limit <= 100000000; limit += 1000000) {
+            System.out.println("Current Iteration: " + limit);
+            for (int j = 0; j < 10; j++) {
+                long startTime = System.currentTimeMillis();
 
-        // Main portion of algorithm
-        ListIterator<String> wordsIterator = words.listIterator();
-        while (wordsIterator.hasNext()) {
-            String replacement = abbreviations.get(wordsIterator.next().toUpperCase());
-            if (replacement != null)
-                wordsIterator.set(replacement);
+                // Main portion of algorithm
+                ListIterator<String> wordsIterator = words.listIterator();
+                int i = 0;
+                while (i < limit) {
+                    String replacement = abbreviations.get(wordsIterator.next().toUpperCase());
+                    if (replacement != null)
+                        wordsIterator.set(replacement);
+                    i++;
+                }
+
+                long endTime = System.currentTimeMillis();
+                runtimes[(limit - 1000000) / 1000000][j] = (endTime - startTime);
+            }
         }
-
-        long endTime = System.currentTimeMillis();
-        System.out.println("Time (Algorithm 2): " + (endTime - startTime) + "ms");
+        System.out.println("Data: ");
+        for(int limit = 1000000; limit < 100000000; limit += 1000000) {
+            System.out.print(limit + ", ");
+        }
+        System.out.println();
+        for (int i = 1; i <= 10; i++) {
+            System.out.print(i + ", ");
+            for (int j = 0; j < 100; j++)
+                System.out.print(runtimes[j][i-1] + ", ");
+            System.out.println();
+        }
+        System.out.println("We done");
     }
 }
