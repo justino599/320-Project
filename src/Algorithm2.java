@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 
-
 public class Algorithm2 {
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
 
-        algorithm2("bin/one_giant_string.txt");
+        algorithm2("bin/all_reviews_content_only.csv");
 
         long endTime = System.currentTimeMillis();
         System.out.println("Total Time: " + (endTime - startTime) + "ms");
@@ -29,11 +28,12 @@ public class Algorithm2 {
 
         // Load words into an ArrayList
         WordIterator wordIterator = new WordIterator(filename);
-        ArrayList<String> words = new ArrayList<>(100000000);
+        ArrayList<String> words = new ArrayList<>(110000000);
         while (wordIterator.hasNext()) {
             words.add(wordIterator.next());
         }
         wordIterator = null;
+        words.trimToSize();
         System.gc();
 
         long startTime = System.currentTimeMillis();

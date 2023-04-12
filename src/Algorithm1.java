@@ -3,13 +3,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public class Algorithm1 {
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
+
         algorithm1("bin/all_reviews_content_only.csv");
+
         long endTime = System.currentTimeMillis();
-        System.out.println("Time: " + (endTime - startTime) + "ms");
+        System.out.println("Total Time: " + (endTime - startTime) + "ms");
     }
 
     public static void algorithm1(String filename) throws IOException {
@@ -30,22 +33,33 @@ public class Algorithm1 {
 
         // Read in all words from the data file
         Iterator<String> wordIterator = new WordIterator(filename);
+        ArrayList<String> words = new ArrayList<>(100000000);
+        while (wordIterator.hasNext()) {
+            words.add(wordIterator.next());
+        }
+        wordIterator = null;
+        words.trimToSize();
+        System.gc();
+
+        long startTime = System.currentTimeMillis();
 
         // Main portion of algorithm
-        ArrayList<String> output = new ArrayList<>(110000000);
-        outerLoop: while (wordIterator.hasNext()) {
-            String word = wordIterator.next();
+        ListIterator<String> wordsIterator = words.listIterator();
+        outerLoop: while (wordsIterator.hasNext()) {
+            String word = wordsIterator.next();
             String uppercaseWord = word.toUpperCase();
             int firstChar = uppercaseWord.charAt(0) - 'A';
             if (0 <= firstChar && firstChar < 26) {
                 for (String[] abbrev : abbreviations[firstChar]) {
                     if (uppercaseWord.equals(abbrev[0])) {
-                        output.add(abbrev[1]);
+                        wordsIterator.set(abbrev[1]);
                         continue outerLoop;
                     }
                 }
             }
-            output.add(word);
         }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time (Algorithm 1): " + (endTime - startTime) + "ms");
     }
 }
